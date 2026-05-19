@@ -25,4 +25,5 @@ public class UserMapper {
         responseDTO.setRole(user.getRole());
         return responseDTO;
     }
+
 }
