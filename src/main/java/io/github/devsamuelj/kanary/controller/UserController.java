@@ -1,5 +1,7 @@
 package io.github.devsamuelj.kanary.controller;
 
+import io.github.devsamuelj.kanary.dto.LoginRequestDTO;
+import io.github.devsamuelj.kanary.dto.LoginResponseDTO;
 import io.github.devsamuelj.kanary.dto.UserRequestDTO;
 import io.github.devsamuelj.kanary.dto.UserResponseDTO;
 import io.github.devsamuelj.kanary.entity.User;
@@ -32,11 +34,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(
-            @Valid @RequestBody UserRequestDTO dto
-    ) {
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequest) {
         // transformando em entidade e mapeando
-        User user = UserMapper.toEntity(dto);
+        User user = UserMapper.toEntity(userRequest);
         // criando o novo usuário
         User savedUser = userService.create(user);
         // criando o corpo da resposta HTTP
@@ -67,4 +67,9 @@ public class UserController {
         // retornando o status 200 OK
         return ResponseEntity.ok(response);
     }
+    @PostMapping("/login")
+    public UserResponseDTO login(@Valid @RequestBody LoginRequestDTO dataUser){
+        return userService.login(dataUser);
+    }
+
 }
