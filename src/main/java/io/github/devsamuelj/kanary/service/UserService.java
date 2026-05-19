@@ -1,8 +1,13 @@
 package io.github.devsamuelj.kanary.service;
 
+import io.github.devsamuelj.kanary.dto.LoginRequestDTO;
+import io.github.devsamuelj.kanary.dto.LoginResponseDTO;
+import io.github.devsamuelj.kanary.dto.UserResponseDTO;
 import io.github.devsamuelj.kanary.entity.User;
 import io.github.devsamuelj.kanary.exception.EmailAlreadyExistsException;
+import io.github.devsamuelj.kanary.exception.PasswordNotExistsException;
 import io.github.devsamuelj.kanary.exception.UserNotFoundException;
+import io.github.devsamuelj.kanary.mapper.UserMapper;
 import io.github.devsamuelj.kanary.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -94,5 +100,19 @@ public class UserService {
         // salvar as alterações do usuário
         return userRepository.save(user);
     }
+
+    public UserResponseDTO login(LoginRequestDTO dataUser) throws UserNotFoundException{
+        Optional<User> userData = userRepository.findByEmail(dataUser.getEmail());
+        if(userData.isEmpty()){
+                throw new UserNotFoundException("Email não encontrado");
+        }
+        User realUser = userData.get();
+        boolean passwordValidation = passwordEncoder.matches(dataUser.getPassword(), realUser.getPassword());
+        if (!passwordValidation){
+            throw new PasswordNotExistsException("Senha incorreta");
+        }
+       return UserMapper.toResponseDTO(realUser);
+    }
+
 
 }
