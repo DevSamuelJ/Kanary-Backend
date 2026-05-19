@@ -1,5 +1,7 @@
 package io.github.devsamuelj.kanary.service;
 
+import io.github.devsamuelj.kanary.dto.LoginRequestDTO;
+import io.github.devsamuelj.kanary.dto.LoginResponseDTO;
 import io.github.devsamuelj.kanary.entity.User;
 import io.github.devsamuelj.kanary.exception.EmailAlreadyExistsException;
 import io.github.devsamuelj.kanary.exception.UserNotFoundException;
@@ -10,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -94,5 +97,13 @@ public class UserService {
         // salvar as alterações do usuário
         return userRepository.save(user);
     }
+
+    public LoginResponseDTO login(LoginRequestDTO dataUser) throws {
+        Optional<User> userData = userRepository.findByEmail(dataUser.getEmail());
+        if(userData.isEmpty()){
+
+        }
+    }
+
 
 }
