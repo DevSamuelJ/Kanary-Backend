@@ -1,0 +1,31 @@
+name: Deploy Automático para VPS
+
+on:
+  push:
+    branches: [ "main" ] # Executa o deploy sempre que houver push na branch main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Executar comandos na VPS via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          # 1. Navegar até a pasta onde está a infraestrutura Docker na VPS
+          cd ~/bancos-dados
+          
+          # 2. Criar ou atualizar o arquivo .env com as credenciais de produção de forma segura
+          echo "DB_HOST=mysql_estudos" > .env
+          echo "DB_NAME=db_estudos_mysql" >> .env
+          echo "DB_USERNAME=root" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          
+          # 3. Baixar as alterações mais recentes do repositório (se houver estrutura lá)
+          # Nota: Como o build do Spring Boot consome muita memória RAM, a melhor estratégia para máquinas de 2GB
+          # é subir a API via Docker usando uma imagem do Maven para buildar, ou buildar direto no GitHub Actions.
+          # Para simplificar e rodar liso, vamos instruir o Docker Compose a reconstruir o container da API.
