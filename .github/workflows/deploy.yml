@@ -52,5 +52,6 @@ jobs:
           echo "DB_USERNAME=root" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           
-          # Força o Docker Compose a recriar e reiniciar apenas o container da API
-          docker compose up -d --build api_spring
+          # Para o container antigo da API se ele existir, limpa o cache e sobe o novo jar
+          docker compose down api_spring --remove-orphans
+          docker compose up -d api_spring
