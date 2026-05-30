@@ -90,7 +90,7 @@ public class UserService {
 
         // verifica se a senha não está nula e nem vazia
         if (updateUser.getPassword() != null && !updateUser.getPassword().isEmpty()) {
-            // se o campo senha for preenchido, atualize a senha já criptografando-a
+            // se o campo senha for preenchido, atualize a senha já a criptografando
             user.setPassword(passwordEncoder.encode(updateUser.getPassword()));
         }
 

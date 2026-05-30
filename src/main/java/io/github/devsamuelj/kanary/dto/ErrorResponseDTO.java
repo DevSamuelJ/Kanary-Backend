@@ -1,7 +1,13 @@
 package io.github.devsamuelj.kanary.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+
+@Getter
+@Setter
 public class ErrorResponseDTO {
     private final int status;
     private final String error;
@@ -15,12 +21,4 @@ public class ErrorResponseDTO {
         this.timestamp = LocalDateTime.now();
     }
 
-    // getters
-    public int getStatus() { return status; }
-
-    public String getError() { return error; }
-
-    public String getMessage() { return message; }
-
-    public LocalDateTime getTimestamp() { return timestamp; }
 }
